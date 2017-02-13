@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Vue - Test</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div class ="header">
+        <h1>Learning Vue and scripting</h1>
+    </div>
+
+    <div>
+        <h2>Basic Vue Examples</h2>
+        <div id="app">
+            <span v-bind:title="load">{{ message | capitalize }}</span>
+            <!-- Short hand version -->
+            <span :title="load">{{ message | capitalize }}</span>
+
+        </div>
+        <div id="app2">
+            <p v-if="visible">Now you see me!</p>
+            <button v-on:click="toggle">{{ buttonText }}</button>
+            <!-- Short hand version -->
+            <button @click="toggle">{{ buttonText }}</button>
+        </div>
+        <div id="app3">
+            <ol>
+                <li v-for="todo in todos">
+                    {{ todo.text }}
+                </li>
+            </ol>
+        </div>
+        <div id="app4">
+            <p> {{ message }}</p>
+            <p v-once>v-once: {{ message }}</p>
+            <input v-model = 'message'/>
+            <button v-on:click="reverseMessage">Reverse Message</button>
+        </div>
+    </div>
+
+    <div>
+        <h1> <a href="BasicJS.html">Go to JS basics</a></h1>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
