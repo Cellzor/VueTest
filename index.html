@@ -15,15 +15,15 @@
         <h2>Basic Vue Examples</h2>
         <div id="app">
             <span v-bind:title="load">{{ message | capitalize }}</span>
-            <!-- Short hand version -->
+            <!-- Short hand version 'v-bind' -->
             <span :title="load">{{ message | capitalize }}</span>
 
         </div>
         <div id="app2">
             <p v-if="visible">Now you see me!</p>
             <button v-on:click="toggle">{{ buttonText }}</button>
-            <!-- Short hand version -->
-            <button @click="toggle">{{ buttonText }}</button>
+            <!-- Short hand version 'v-on' -->
+            <button @click="toggle">{{ reversedButtonText }}</button>
         </div>
         <div id="app3">
             <ol>
@@ -37,6 +37,14 @@
             <p v-once>v-once: {{ message }}</p>
             <input v-model = 'message'/>
             <button v-on:click="reverseMessage">Reverse Message</button>
+        </div>
+        <div id="app5">
+            <p> {{ firstName }}</p>
+            <p> {{ lastName }}</p>
+            <p> {{ fullName }}</p>
+            <input v-model = 'firstName'/>
+            <p> {{ fullName2 }} with setters and getters</p>
+            <input v-model = 'fullName2'/>
         </div>
     </div>
 

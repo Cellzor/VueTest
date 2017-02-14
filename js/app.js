@@ -61,6 +61,20 @@ var app2 = new Vue({
             }
             this.visible = !this.visible
         }
+    },
+    /*
+    computed getter, the getter is cached and not re-evaluated until the value it is based on changes
+    opposed to methods, which run upon every request.
+    Usually cache is the better solution, especially when the value is expensive to computed and other
+    ars in turn depend on it.
+
+    if cache is to be avoided => methods
+     */
+    computed: {
+        reversedButtonText: function () {
+            //'this' points to the app2 instance, meaning if app2.message is changed so is the reverse
+            return this.buttonText.split('').reverse().join('');
+        }
     }
 });
 
@@ -86,3 +100,47 @@ var app4 = new Vue({
         }
     }
 });
+
+var app5 = new Vue({
+    el: '#app5',
+    data: {
+        firstName: 'Foo',
+        lastName: 'Bar',
+    },
+    computed: {
+        /*
+        computed properties can also be used instead of watchers:
+         data: {
+             firstName: 'Foo',
+             lastName: 'Bar',
+             fullName: 'Foo Bar'
+         },
+         watch: {
+             firstName: function (val) {
+             this.fullName = val + ' ' + this.lastName
+         },
+             lastName: function (val) {
+             this.fullName = this.firstName + ' ' + val
+         }
+
+         Use watcher when you want to react to data changes asynchronously or expensive operations
+         e.g API access, rate limiting, state requirements and so on.
+         */
+        fullName: function () {
+            return this.firstName + " " + this.lastName;
+        },
+        fullName2: {
+            get: function () {
+                return this.firstName + " " + this.lastName;
+            },
+            //When fullName2 is being changed, the below setter will be invoked
+            set: function (newValue) {
+                var names = newValue.split(" ");
+                this.firstName = names[0];
+                this.lastName = names[names.length-1];
+
+            }
+        }
+    }
+})
+
