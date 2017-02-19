@@ -10,7 +10,6 @@
     <div class ="header">
         <h1>Learning Vue and scripting</h1>
     </div>
-		<!-- New PC --->
     <div>
         <h2>Basic Vue Examples</h2>
         <div id="app">
@@ -46,11 +45,20 @@
             <p> {{ fullName2 }} with setters and getters</p>
             <input v-model = 'fullName2'/>
         </div>
+        <div id="Watcher">
+            <p>
+                Ask a Yes/No question:
+                <input v-model="question"/>
+            </p>
+            <p>{{ answer }}</p>
+        </div>
     </div>
 
     <div>
         <h1> <a href="BasicJS.html">Go to JS basics</a></h1>
     </div>
+    <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
