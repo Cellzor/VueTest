@@ -85,7 +85,23 @@ var app3 = new Vue({
             { text : 'Learn JavaScript'},
             { text : 'Learn Vue'},
             { text : 'Build something awsome'}
-        ]
+        ],
+        isActive : true,
+        checker : false,
+        activeColor : 'red',
+        fontSize : 15,
+        styleObject : {
+            color: 'Green',
+            fontSize: '13px'
+        }
+    },
+    computed : {
+        classObject : function() {
+            return {
+                active : this.isActive,
+                checker : this.checker
+            }
+        }
     }
 });
 
@@ -187,3 +203,8 @@ var watchExample = new Vue({
             )
         }
     });
+
+
+vue.component('my-component', {
+    template: '<p class="foo bar">Hi</p>'
+});

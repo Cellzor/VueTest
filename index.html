@@ -24,12 +24,20 @@
             <!-- Short hand version 'v-on' -->
             <button @click="toggle">{{ reversedButtonText }}</button>
         </div>
-        <div id="app3">
-            <ol>
-                <li v-for="todo in todos">
-                    {{ todo.text }}
-                </li>
-            </ol>
+        <div id="app3" v-bind:class="classObject">
+            <!-- v-bind on class attribute, sets classes on the fly
+                 can be defined in-line or as object                -->
+            <div v-bind:class="{active : isActive, checker : checker}">
+
+                <!-- v-bind on style attribute, both inline and as objects,
+                multiple objects can be added as an array-->
+                <ol v-bind:style="{color: activeColor, fontSize: fontSize + 'px'}">
+                    <p>Below you can find the needed steps to success:</p>
+                    <li v-bind:style="styleObject" v-for="todo in todos">
+                        {{ todo.text }}
+                    </li>
+                </ol>
+            </div>
         </div>
         <div id="app4">
             <p> {{ message }}</p>
