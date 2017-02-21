@@ -17,13 +17,36 @@
             <!-- Short hand version 'v-bind' -->
             <span :title="load">{{ message | capitalize }}</span>
 
-        </div>
+        </div> <!-- Simple texts and filters -->
         <div id="app2">
             <p v-if="visible">Now you see me!</p>
+            <p v-else>Now you don't!</p>
             <button v-on:click="toggle">{{ buttonText }}</button>
             <!-- Short hand version 'v-on' -->
             <button @click="toggle">{{ reversedButtonText }}</button>
-        </div>
+
+
+            <br/>
+            <!-- v-show uses CSS display while v-if properly destroys
+             Generally speaking, v-if has higher toggle costs while v-show has higher initial render costs.
+             So prefer v-show if you need to toggle something very often, and prefer v-if if the condition is
+             unlikely to change at runtime. -->
+            <button @click="RNGJesus">Let RNG roll :D!</button>
+            <p>Vue tries to re-render minimal content, the input field will not clear used content unless a key
+            attribute us specified to explicitly declare uniqueness</p>
+            <template v-if="RNG === 0">
+                <p>Template conditional 0, "filtered wrapper"</p>
+                <input placeholder="Reused by Vue">
+            </template>
+            <template v-else-if="RNG === 1">
+                <p>Template conditional 1, "filtered wrapper"</p>
+                <input placeholder="Minimal re-render">
+            </template>
+            <template v-else>
+                <p>Template conditional 2, "filtered wrapper"</p>
+                <input placeholder="user content stored">
+            </template>
+        </div> <!-- conditionals & buttons -->
         <div id="app3" v-bind:class="classObject">
             <!-- v-bind on class attribute, sets classes on the fly
                  can be defined in-line or as object                -->
@@ -33,12 +56,17 @@
                 multiple objects can be added as an array-->
                 <ol v-bind:style="{color: activeColor, fontSize: fontSize + 'px'}">
                     <p>Below you can find the needed steps to success:</p>
-                    <li v-bind:style="styleObject" v-for="todo in todos">
-                        {{ todo.text }}
+                    <!-- template can be used on v-for as well -->
+                    <li v-bind:style="styleObject" v-for="(todo, index) in todoArray">
+                        {{ starterMessage }} - {{ index }} - {{ todo.text }}
+                    </li>
+                    <p>Contents of the styleObject:</p>
+                    <li v-for="(value, key, index) in styleObject">
+                        {{ key }} - {{ value }} - {{ index }}
                     </li>
                 </ol>
             </div>
-        </div>
+        </div> <!-- styles, classes & for-loops -->
         <div id="app4">
             <p> {{ message }}</p>
             <p v-once>v-once: {{ message }}</p>

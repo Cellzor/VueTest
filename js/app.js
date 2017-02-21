@@ -50,7 +50,8 @@ var app2 = new Vue({
     el : '#app2',
     data : {
         visible : true,
-        buttonText : "Hide text"
+        buttonText : "Hide text",
+        RNG : 0
     },
     methods : {
         toggle : function () {
@@ -60,6 +61,13 @@ var app2 = new Vue({
                 this.buttonText = "Hide text"
             }
             this.visible = !this.visible
+        },
+        RNGJesus : function () {
+            if(this.RNG === 2){
+                this.RNG = 0;
+            } else {
+                this.RNG++;
+            }
         }
     },
     /*
@@ -81,7 +89,8 @@ var app2 = new Vue({
 var app3 = new Vue({
     el : '#app3',
     data : {
-        todos : [
+        starterMessage : 'Item ',
+        todoArray : [
             { text : 'Learn JavaScript'},
             { text : 'Learn Vue'},
             { text : 'Build something awsome'}
@@ -205,6 +214,3 @@ var watchExample = new Vue({
     });
 
 
-vue.component('my-component', {
-    template: '<p class="foo bar">Hi</p>'
-});
