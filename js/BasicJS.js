@@ -77,7 +77,7 @@ myArray.forEach(function(i){
     console.log("myArray: "+i);
 } );
 
-var doSwitch  =function () {
+var doSwitch  = function () {
     switch (prompt("What is the weather like?")) {
         case "rainy":
             console.log("Remember to bring an umbrella.");
@@ -173,8 +173,14 @@ console.log(users[0].name);
 
 
 
-// **************** Events ************************************************************************
-function doClick(){
+// **************** functions ************************************************************************
+// Shorthand version of var XX = function (){}
+// Functions can be defined at the bottom, they are conceptually moved to the top of their scope
+// Be careful with functions defined in nested if statements and such, those are not moved outside their scope
+
+//params are not required. If to few are specified when the function is called they are filled with 'undefined'
+//if too many params are provided, they are simply ignored
+function doClick(x, y, z){
     alert("You Clicked!");
 }
 function changeText(id){
