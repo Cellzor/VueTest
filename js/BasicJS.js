@@ -14,6 +14,11 @@ console.log(typeof myDecimal);
 console.log(typeof myString);
 
 var myBool = true;                      //Boolean
+/*
+falsy:
+false, 0, "", null, undefined, NaN
+all else are truesy
+ */
 var myObject = {                        //Object
     name : "Triangle",
     Lenght : 10,
@@ -28,7 +33,7 @@ var myFunction = function () {     //Function
 };
 var undefined;                          //Undefined Value
 var myNull = null;                      //Null
-var myArray = ['red', 'blue', 'green'];   //Basic array
+
 
 //ternary operator = operates on 3 values, e.g.
 //      true ? 1 : 2    //  > 1
@@ -55,6 +60,17 @@ console.log("Karl" || "user")
 // it returns that value, and otherwise it returns the value on its right.
 
 
+/* Arrays
+    .push(x)    - adds item to end
+    .pop(x)     - removes and returns item from end
+    .shift(x)   - adds item to start
+    .unshift(x) - removes and returns item from start
+
+    indexOf     - starts from start, returns index from left>
+    lastIndexOf - starts from end, returns index from left>
+    slice(x, y) - returns slice of the array, x inclusive, y exclusive and optional
+ */
+var myArray = ['red', 'blue', 'green'];   //Basic array
 myArray.push('purple');
 console.log(myNumber);
 console.log(myArray.reverse());
@@ -123,6 +139,16 @@ console.log("Person-object: "+person.children[1]);
 console.log("Person-object: "+person.address.state);
 console.log("Person-object: "+person.fullName());
 
+person.tester = "Test";
+console.log(person.tester);
+console.log("tester" in person);
+console.log(["tester"] in person);  //targets property called "tester", works in case of "aa bb"
+for(var property in person){
+    console.log("the person-object has property: '"+property + "' with value: " +person[property]);
+}
+delete person.tester;
+console.log(person.tester);
+
 
 //Object constructor
 //not very useful in the case of similar objects, as you have to repeat this for every object
@@ -170,6 +196,11 @@ var users = [
 console.log(users[0]);
 console.log(users[0].name);
 
+
+var mySQLStatement = "Select * from obd_objectdata;";
+console.log(mySQLStatement);
+mySQLStatement.trim();
+console.log(mySQLStatement);
 
 
 
@@ -256,4 +287,106 @@ function createChessBoard(){
         console.log(board);
         board = "";
     }
+}
+function returnMin(x, y){
+    if(x < y)
+        return x;
+    else
+        return y;
+};
+function isEven(number){
+    if(number == 0){
+        return true;
+    } else if (number == 1 ||number == -1){
+        return false;
+    } else{
+        return isEven(number-2);
+    }
+
+
+};
+function countBs(word){
+    return countChar(word, "B");
+}
+function countChar(word, character){
+    var counter = 0;
+    for(var i = 0; i < word.length; i++){
+        if(word[i] == character)
+            counter++;
+    }
+    return counter;
+}
+function argumentTester(){
+    //shows the amount of arguments passed to the function, as well as the position and actual value
+    //the arguments object is not a array and lacks many of the functions an array exposes
+    console.log("amount of args given: "+ arguments.length);
+    for(var args in arguments){
+        console.log("pos: " + args + " value: " + arguments[args]);
+    }
+}
+function showGlobal(){
+    //All defined variable are stored in the global object
+    //this function prints all defined variables and their values
+    for(var args in window){
+        console.log("variable: "+args+" value: " + window[args]);
+    }
+};
+/**
+ * returns an array holding the range between start and end
+ * Optional step parameter adjusts steps
+ * @param {integer} start
+ * @param {integer} end
+ * @param {integer} [step=1] step
+ * @returns {array}
+ */
+function range(start, end, step){
+    //TODO: fix start > end case with positive step
+    //TODO: fix end > start case with positive step
+    temp = [];
+    if(arguments.length == 2 && typeof start == "number"
+        && typeof end == "number"){
+        step = 1;
+    } else if(arguments.length == 3 && typeof start == "number"
+        && typeof end == "number" && typeof step == "number"){
+        //validation case when stepper given
+    } else {
+        return -1;
+    }
+
+    if(step >= 0) {
+        //Counting upwards
+        for (var i = start; i <= end; i+=step) {
+            temp.push(i);
+        }
+    } else {
+        for (var i = start; i >= end; i+=step) {
+            temp.push(i);
+        }
+    }
+
+    return temp;
+};
+function sum(numberArray){
+    var counter = 0;
+    for(var i = 0; i < numberArray.length; i++){
+        counter += numberArray[i];
+    }
+    return counter;
+};
+function reverseArray(myArray){
+    temp = [];
+    for(var i = 0; i < myArray.length; i++){
+        temp.unshift(myArray[i]);
+    }
+    return temp;
+};
+function reverseArrayInPlace(myArray){
+    var temp = [];
+    for (var i = 0; i < Math.floor(myArray.length/2);i++) {
+        temp[i] = myArray[i]; //save first part of array, so it won't be overwritten
+        myArray[i] = myArray[myArray.length - 1 - i]; //replace one of the elements in the first half of the array with the corresponding element in the back half of the array
+        myArray[myArray.length - 1 - i] = temp[i]; //replace one of the elements in the back half of the array with the corresponding element in the first half of the array that was placed in safekeeping in a temporary variable
+    }
+    return myArray;
+
 }
