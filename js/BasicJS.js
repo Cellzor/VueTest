@@ -177,6 +177,27 @@ var melon = new Fruit("Melon", "Green", "Round");
 console.log(appleFruit);
 console.log(melon.describe());
 
+// List test
+var list = {
+    value : 1,
+    rest : {
+        value : 2,
+        rest : {
+            value : 3,
+            rest : null
+        }
+    }
+};
+var list2 = {
+    value : 0,
+    rest : list
+};
+var list3 = {
+    value : -1,
+    rest : list
+};
+
+
 // JSON Array
 var users = [
     {
@@ -287,7 +308,7 @@ function createChessBoard(){
         console.log(board);
         board = "";
     }
-}
+};
 function returnMin(x, y){
     if(x < y)
         return x;
@@ -315,7 +336,7 @@ function countChar(word, character){
             counter++;
     }
     return counter;
-}
+};
 function argumentTester(){
     //shows the amount of arguments passed to the function, as well as the position and actual value
     //the arguments object is not a array and lacks many of the functions an array exposes
@@ -323,7 +344,7 @@ function argumentTester(){
     for(var args in arguments){
         console.log("pos: " + args + " value: " + arguments[args]);
     }
-}
+};
 function showGlobal(){
     //All defined variable are stored in the global object
     //this function prints all defined variables and their values
@@ -388,5 +409,42 @@ function reverseArrayInPlace(myArray){
         myArray[myArray.length - 1 - i] = temp[i]; //replace one of the elements in the back half of the array with the corresponding element in the first half of the array that was placed in safekeeping in a temporary variable
     }
     return myArray;
+
+};
+function arrayToList(myArray) {
+    var myList =  null;
+    for(var i = myArray.length -1; i >= 0; i--){
+        myList = prepend(myArray[i], myList);
+        //myList = {value : myArray[i], rest : myList}; Alternative without helper function
+    }
+    return myList;
+};
+function listToArray(myList) {
+    for(var node = myList; node; node = node.rest){
+        //advances by going to the next rest every time, eventually null is reached causing the loop to stop
+
+    }
+    nth()
+};
+function prepend(element, myList) {
+    //new list adds element to the front of list
+    var tempList = {
+        value : element,
+        rest : myList
+    };
+    return tempList;
+};
+function nth(myList, number) {
+    //returns element at givem pos or undefinde when there is no element
+    //recursive!!
+    var value = undefined;
+    var counter = 0;
+
+    if(counter < number){
+        nth()
+    } else if
+    myList
+
+    return value;
 
 }
