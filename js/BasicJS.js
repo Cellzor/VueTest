@@ -420,11 +420,12 @@ function arrayToList(myArray) {
     return myList;
 };
 function listToArray(myList) {
+    var myArray = [];
     for(var node = myList; node; node = node.rest){
         //advances by going to the next rest every time, eventually null is reached causing the loop to stop
-
+        myArray.push(node.value);
     }
-    nth()
+    return myArray;
 };
 function prepend(element, myList) {
     //new list adds element to the front of list
@@ -437,14 +438,39 @@ function prepend(element, myList) {
 function nth(myList, number) {
     //returns element at givem pos or undefinde when there is no element
     //recursive!!
-    var value = undefined;
-    var counter = 0;
+    if(number == 0 && myList.value != undefined){
+        //reached element
+        return myList.value;
+    } else if(myList.rest != undefined) {
+        return nth(myList.rest, number -1);
+    } else {
+        return undefined;
+    }
 
-    if(counter < number){
-        nth()
-    } else if
-    myList
+};
+function deepEqual(value1, value2) {
 
-    return value;
+    if(typeof value1 == "object" && typeof value2 == "object"
+        && value1 != null && value2 != null){
+        //deep equal on object properties
 
-}
+        if(value1.length == value2.length){     //undefined, fungerar ej  på object!
+            for(var property in value1){
+                if(value2[property]){
+                    if(!deepEqual(value1[property], value2[property]))
+                        return false;
+                } else
+                    return false;
+            }
+        } else
+            return false;
+
+    } else if (value1 != null && value2 != null){
+        //simple compare
+        if(value1 === value2){
+            return true;
+        } else
+            return false;
+    }
+    return true;
+};
