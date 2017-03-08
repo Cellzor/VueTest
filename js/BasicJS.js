@@ -449,12 +449,16 @@ function nth(myList, number) {
 
 };
 function deepEqual(value1, value2) {
-
     if(typeof value1 == "object" && typeof value2 == "object"
         && value1 != null && value2 != null){
         //deep equal on object properties
+        var counter1=0, counter2=0;
+        for(var prop in value1)
+            counter1++;
+        for(var prop in value2)
+            counter2++;
 
-        if(value1.length == value2.length){     //undefined, fungerar ej  på object!
+        if(counter1 == counter2){
             for(var property in value1){
                 if(value2[property]){
                     if(!deepEqual(value1[property], value2[property]))
@@ -464,7 +468,6 @@ function deepEqual(value1, value2) {
             }
         } else
             return false;
-
     } else if (value1 != null && value2 != null){
         //simple compare
         if(value1 === value2){
@@ -474,3 +477,9 @@ function deepEqual(value1, value2) {
     }
     return true;
 };
+
+
+
+
+
+
