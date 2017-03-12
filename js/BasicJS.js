@@ -3,13 +3,15 @@
  */
 
 
-// **************** Basic functions ***************************************************************
+// ****************Basic Data types***************************************************************
     //6 basic types of values
 var myNumber = 5;                       //Number n^64, 18 zeroes
 // Special cases: Infinity, -Infinity & NaN (Not a number) are all valid integers
 // NaN == NaN > false, use isNaN(myNumber)
 var myDecimal = 1.5;                    //15 zeroes, i.e. not precis valuesll
 var myString = 'Hello World!';          //String
+var undefined;                          //Undefined Value
+var myNull = null;                      //Null
 console.log(typeof myDecimal);
 console.log(typeof myString);
 
@@ -31,32 +33,33 @@ var myFunction = function () {     //Function
     return true;
 
 };
-var undefined;                          //Undefined Value
-var myNull = null;                      //Null
 
+// ****************Basic Operators***************************************************************
 
+//Unary operator = operates on 1 value, - typeof
+//Binary operator =  operates on 2 values, e.g. + - /*
 //ternary operator = operates on 3 values, e.g.
 //      true ? 1 : 2    //  > 1
 //      false ? 1 : 2   //  > 2
-//Binary operator =  operates on 2 values, e.g. + - /*
-//Unary operator = operates on 1 value, - typeof
+
 
 // == and != do cause auto conversion meaning 0 == false and "" == false return true
 // === and !== do not auto convert, meaning 0 === false and "" !== false return false
 
 // Highest prior > lowest Prio
 //  */ +- == && ||
-//1 + 1 == 2 && 10 * 10 > 50
+//example:  1 + 1 == 2 && 10 * 10 > 50
+//          -> true
 
 //The || operator, will return the value to its left when that can be converted to true
 // and will return the value on its right otherwise
-console.log(null || "user")
+console.log(null || "user");
 // → user
-console.log("Karl" || "user")
+console.log("Karl" || "user");
 // → Karl
 
 //The && operator works similarly, but the other way around.
-// When the value to its left // is something that converts to false,
+// When the value to its left is something that converts to false,
 // it returns that value, and otherwise it returns the value on its right.
 
 
@@ -69,12 +72,39 @@ console.log("Karl" || "user")
     indexOf     - starts from start, returns index from left>
     lastIndexOf - starts from end, returns index from left>
     slice(x, y) - returns slice of the array, x inclusive, y exclusive and optional
+    .forEach(function(){})  - iterate over each object
+    .filter( function(){})   - returns an array with specified filter, i.e. only inlcude elements with X
+    .map ( function(){})     - returns array with only certain properties inlcuded, i.e. only propert x y z
+    .reduce ( function(){})  - condenses an array to a single value by repeatedly combining values
  */
 var myArray = ['red', 'blue', 'green'];   //Basic array
 myArray.push('purple');
 console.log(myNumber);
 console.log(myArray.reverse());
 
+function map(array, transform) {
+    var mapped = [];
+    for (var i = 0; i < array.length; i++)
+        mapped.push(transform(array[i]));
+    return mapped;
+}
+function filter(array, test) {
+    var passed = [];
+    for (var i = 0; i < array.length; i++) {
+        if (test(array[i]))
+            passed.push(array[i]);
+    }
+    return passed;
+}
+function reduce(array, combine, start) {
+    // the standard function doesn't require start, array with 1 element will use that as start
+    var current = start;
+    for (var i = 0; i < array.length; i++)
+        current = combine(current, array[i]);
+    return current;
+}
+
+// **************** Iterative methods***************************************************************
 // Break breaks the loop entirely
 // Continue stops the current iteration and continues with the next
 
@@ -199,6 +229,8 @@ var list3 = {
 
 
 // JSON Array
+// JSON.stringify(x) convert to JSON
+// JSON.parse(x) convert to JS value
 var users = [
     {
         name : "John Doe",
@@ -477,7 +509,46 @@ function deepEqual(value1, value2) {
     }
     return true;
 };
-
+/** High-order functions
+ * Functions that operate on other functions, either by taking them as arguments or by returning them
+ */
+function greaterThan(n){
+    //var testerFunction = greaterThan(5);
+    //closure example, with above definition out of function, value will be compared to 5
+    //  return f.apply(null, arguments);
+    //  using apply sends all supplied arguments in the call, where as the below and takes the first and ignores all else
+    return function(value){
+        return value > n;
+    }
+}; //Closure
+function noisy(f) {
+    //Closure with functional changes, caution - this doesn't work in all browers.
+    //noisy(Boolean)(0);
+    // → calling with 0
+    // → called with 0 - got false
+    return function (arg) {
+        console.log("calling with: ", arg);
+        var val = f(arg);
+        console.log("Called with: ", arg, " - got ", val);
+        return val;
+    };
+}; //Closure with function changes
+/**
+ * control flow
+ */
+function unless(test, then) {
+    if (!test) then();
+}
+function repeat(times, body) {
+    for (var i = 0; i < times; i++) body(i);
+}
+repeat(3, function(n) {
+    unless(n % 2, function() {
+        console.log(n, "is even");
+    });
+});
+// → 0 is even
+// → 2 is even
 
 
 
