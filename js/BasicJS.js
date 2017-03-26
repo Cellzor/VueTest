@@ -148,7 +148,9 @@ var doLoop = function () {
 
 
 // **************** Objects ***********************************************************************
-
+// All objects, functions and arrays are derived from prototypes:
+// object.prototype, function.prototype, array.prototype
+// they receive their basic set of functions from the prototype, all of those are nonenumerable
 var person = {
     firstName : 'Petter',
     lastName : 'Robsson',
@@ -190,7 +192,7 @@ apple.describe = function () {
 };
 console.log(apple.describe());
 
-//Constructor pattern
+//Constructor pattern, creates a 'Fruit'-prototype
 function Fruit(name, color, shape){
     this.name = name;
     this.color = color;
@@ -201,11 +203,32 @@ function Fruit(name, color, shape){
     }
 }
 
+// New <Constructor> creates an object based on the defined prototype
 var appleFruit = new Fruit("Apple", "Red", "Round");
 var melon = new Fruit("Melon", "Green", "Round");
 
 console.log(appleFruit);
 console.log(melon.describe());
+
+// all defined properties are enumerated by default, meaning in / for loops are effected
+// Define nonenumerable propery for Fruit
+Object.defineProperty(Fruit.prototype, "hiddenNonsense",
+                      {enumerable: false, value: "hi"});
+
+console.log(("toString" in melon)); // → true, checks prototypes
+console.log(melon.hasOwnProperty("toString")); // → false, skips prototypes
+
+//Hence to ensure prototype changes won't fuck up code, when depending on properties use below:
+// One problem with this is, the situation where 'hasOwnProperty' get redefined for the object, essentially overwriting the function
+for (var name in melon) {
+  if (melon.hasOwnProperty(name)) {
+    // ... this is an own property
+  }
+}
+//To avoid that, create an object with 'null'. This removes any prototypes from the object
+var emptyObject = Object.create(null);
+console.log("emptyObject toString?");
+console.log("toString" in emptyObject); //  → false
 
 // List test
 var list = {
@@ -550,7 +573,10 @@ repeat(3, function(n) {
 // → 0 is even
 // → 2 is even
 
-
-
-
-
+// Flattenarray example:
+var flattenArray = [[1, 2, 3], [4, 5], [6]];
+console.log(flattenArray.reduce(
+  function(accumulator, arrayContent) {       // callback function, accumulator is being added on, arrayContent is current inner array
+    return accumulator.concat(arrayContent);  // adds arrayContent to accumulator
+}, []                                         // intialValue sets accumulator to type array, else concat isn't available
+));
