@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by Christian on 2017-02-05.
  */
 
@@ -12,19 +12,19 @@ var myDecimal = 1.5;                    //15 zeroes, i.e. not precis valuesll
 var myString = 'Hello World!';          //String
 var undefined;                          //Undefined Value
 var myNull = null;                      //Null
-console.log(typeof myDecimal);
-console.log(typeof myString);
+//console.log(typeof myDecimal);  //number
+//console.log(typeof myString);   //string
 
 var myBool = true;                      //Boolean
 /*
 falsy:
 false, 0, "", null, undefined, NaN
-all else are truesy
+  all else are truesy
  */
 var myObject = {                        //Object
     name : "Triangle",
     Lenght : 10,
-    Hello : function () {
+    Hello : function () {               //Method
         alert("Hello World!")
 
     }
@@ -53,10 +53,9 @@ var myFunction = function () {     //Function
 
 //The || operator, will return the value to its left when that can be converted to true
 // and will return the value on its right otherwise
-console.log(null || "user");
-// → user
-console.log("Karl" || "user");
-// → Karl
+
+//console.log(null || "user");    // → user
+//console.log("Karl" || "user");  // → Karl
 
 //The && operator works similarly, but the other way around.
 // When the value to its left is something that converts to false,
@@ -79,9 +78,16 @@ console.log("Karl" || "user");
  */
 var myArray = ['red', 'blue', 'green'];   //Basic array
 myArray.push('purple');
-console.log(myNumber);
-console.log(myArray.reverse());
+// console.log(myArray.reverse()); //["purple", "green", "blue", "red"]
 
+/*
+  Higher-order functions, the below are already defined on prototypes but are
+  defined below to show how they work
+  functor are objects that are implementing map, for example an array
+    = takes value, function and returns the transformation in a structured value
+  forEach is not a "functor-function" -> it doesn't return in a structured way by default
+  filter is also no functor, only 'map' is
+*/
 function map(array, transform) {
     var mapped = [];
     for (var i = 0; i < array.length; i++)
@@ -110,17 +116,17 @@ function reduce(array, combine, start) {
 
 
 for(var i=0; i <3; i++){
-    console.log('For-loop:' +i);
+    //console.log('For-loop:' +i); // For-loop: 1, For-loop: 2, For-loop: 3
 }
 
 var j = 0;
 while(j<3){
-    console.log('While-loop: ' +j);
+    //console.log('While-loop: ' +j); // While-loop: 1, While-loop: 2, While-loop: 3
     j++;
 }
 
 myArray.forEach(function(i){
-    console.log("myArray: "+i);
+    //console.log("myArray: "+i); // myArray: red, myArray: blue, myArray: green, myArray: purple
 } );
 
 var doSwitch  = function () {
@@ -163,23 +169,31 @@ var person = {
     },
     fullName : function(){
         return this.firstName + " " + this.lastName;  //this the current object it is in
+    },
+    get lenght() {
+      return this.age;
+    },
+    set lenght(value){
+      console.log("Ignoring attempt to set lenght to ", value);
     }
 };
+// When a getter but no setter is defined, writing to the property is simply ignored.
 
-console.log("Person-object: "+person.firstName);
-console.log("Person-object: "+person.children[1]);
-console.log("Person-object: "+person.address.state);
-console.log("Person-object: "+person.fullName());
+//console.log("Person-object: "+person.firstName);      //Person-object: Petter
+//console.log("Person-object: "+person.children[1]);    //Person-object: Benny
+//console.log("Person-object: "+person.address.state);  //Person-object: BLE
+//console.log("Person-object: "+person.fullName());     //Person-object: Petter Robsson
 
 person.tester = "Test";
-console.log(person.tester);
-console.log("tester" in person);
-console.log(["tester"] in person);  //targets property called "tester", works in case of "aa bb"
-for(var property in person){
-    console.log("the person-object has property: '"+property + "' with value: " +person[property]);
+//console.log(person.tester);         //Test
+//console.log("tester" in person);    //true
+//console.log(["tester"] in person);  //true - targets property called "tester"
+for(var p in person){
+    //console.log("the person-object has property: '"+ p + "' with value: " +person[p]);
+    //prints all properties, functions are printed as-is
 }
 delete person.tester;
-console.log(person.tester);
+//console.log(person.tester); //undefined
 
 
 //Object constructor
@@ -190,33 +204,61 @@ apple.shape = "round";
 apple.describe = function () {
     return "an apple is the color " + this.color + " and is the shape " +this.shape;
 };
-console.log(apple.describe());
+//console.log(apple.describe()); //an apple is the color red and is the shape round
 
 //Constructor pattern, creates a 'Fruit'-prototype
 function Fruit(name, color, shape){
-    this.name = name;
+    this._name = name;  //if _ isn't present the getter is causing an infinite loop
     this.color = color;
     this.shape = shape;
-
-    this.describe = function() {
-        return "an "+ this.name +" is the color " + this.color + " and is the shape " +this.shape;
-    }
 }
+//Below delcaration is needed to override when inherited
+Fruit.prototype = {
+    describe : function() {
+        return "an "+ this.name +" is the color " + this.color + " and is the shape " +this.shape;
+    },
+    get name() {
+      return this._name;
+
+    }
+
+}
+
+
 
 // New <Constructor> creates an object based on the defined prototype
 var appleFruit = new Fruit("Apple", "Red", "Round");
 var melon = new Fruit("Melon", "Green", "Round");
 
-console.log(appleFruit);
-console.log(melon.describe());
+//console.log(appleFruit);  //prints all properties
+//console.log(melon.describe()); //an Melon is the color Green and is the shape Round
+
+//Inheritence from Fruit with override of describe
+function Vegetable(name, color, shape, weight){
+  this.weight = weight
+  Fruit.call(this, name, color, shape);
+}
+Vegetable.prototype = Object.create(Fruit.prototype);
+Vegetable.prototype.describe = function(){
+  return "I'm a vegetable!";
+};
+var tomato = new Vegetable("Tomato", "Red", "Round", 10);
+//console.log(tomato.describe()); //I'm a vegetable!
+
+// ---------------- instanceof - operator
+//console.log(new Vegetable("A") instanceof Fruit); // → true
+//console.log(new Vegetable("A") instanceof Fruit); // → true
+//console.log(new Fruit("A") instanceof Vegetable); // → false
+//console.log([1] instanceof Array);  // → true
+
 
 // all defined properties are enumerated by default, meaning in / for loops are effected
 // Define nonenumerable propery for Fruit
 Object.defineProperty(Fruit.prototype, "hiddenNonsense",
                       {enumerable: false, value: "hi"});
 
-console.log(("toString" in melon)); // → true, checks prototypes
-console.log(melon.hasOwnProperty("toString")); // → false, skips prototypes
+//console.log(("toString" in melon)); // → true, checks prototypes
+//console.log(melon.hasOwnProperty("toString")); // → false, skips prototypes
 
 //Hence to ensure prototype changes won't fuck up code, when depending on properties use below:
 // One problem with this is, the situation where 'hasOwnProperty' get redefined for the object, essentially overwriting the function
@@ -227,8 +269,7 @@ for (var name in melon) {
 }
 //To avoid that, create an object with 'null'. This removes any prototypes from the object
 var emptyObject = Object.create(null);
-console.log("emptyObject toString?");
-console.log("toString" in emptyObject); //  → false
+//console.log("toString" in emptyObject); //  → false
 
 // List test
 var list = {
@@ -269,15 +310,8 @@ var users = [
     }
 
 ];
-console.log(users[0]);
-console.log(users[0].name);
-
-
-var mySQLStatement = "Select * from obd_objectdata;";
-console.log(mySQLStatement);
-mySQLStatement.trim();
-console.log(mySQLStatement);
-
+//console.log(users[0]);    //prints the object
+//console.log(users[0].name); //John Doe
 
 
 // **************** functions ************************************************************************
@@ -567,7 +601,7 @@ function repeat(times, body) {
 }
 repeat(3, function(n) {
     unless(n % 2, function() {
-        console.log(n, "is even");
+        //console.log(n, "is even");
     });
 });
 // → 0 is even
@@ -575,8 +609,231 @@ repeat(3, function(n) {
 
 // Flattenarray example:
 var flattenArray = [[1, 2, 3], [4, 5], [6]];
-console.log(flattenArray.reduce(
+flattenArray = (flattenArray.reduce(
   function(accumulator, arrayContent) {       // callback function, accumulator is being added on, arrayContent is current inner array
     return accumulator.concat(arrayContent);  // adds arrayContent to accumulator
 }, []                                         // intialValue sets accumulator to type array, else concat isn't available
 ));
+
+//brainfart ???
+var categoryTestData = [
+  { id: 'animals', 'parent': null },
+  { id: 'mammals', 'parent': 'animals' },
+  { id: 'cats', 'parent': 'mammals' },
+  { id: 'dogs', 'parent': 'mammals' },
+  { id: 'persian', 'parent': 'cats' },
+  { id: 'siamese', 'parent': 'cats' },
+  { id: 'chiahuahua', 'parent': 'dogs' },
+  { id: 'labrador', 'parent': 'dogs'}
+];
+
+function makeTree(categories, parent){
+  var node = {}; //node is part of a tree
+  categories
+    .filter(function(c){
+      return c.parent === parent;
+    })
+    .forEach(function(c){
+      node[c.id] = makeTree(categories, c.id);
+
+    });
+  return node;
+}
+
+/*    Prints the tree as per categoryTestData definition
+console.log(
+  JSON.stringify(
+    makeTree(categoryTestData, null)
+    , null, 2)
+);
+*/
+// ------------------   Image-loader in-file
+function loadImage(url){
+  return new Promise((resolve, reject) => {
+    let image = new Image();
+
+    image.onload = function(){
+      resolve(image);
+    }
+
+    image.onerror = function(){
+      let = message =
+        "Could not load image at " + url;
+      reject(new Error(msg));
+    }
+
+    image.src = url;
+  })
+}
+
+let addImg = (src) => {
+  let imgElement = document.createElement("img")
+  imgElement.src = src
+  document.body.appendChild(imgElement)
+}
+
+
+//Christmas-tree a'la node
+loadImage('images/cat1.jpeg').then((img1) => {
+  addImg(img1.src)
+  loadImage('images/cat2.jpeg').then((img2) => {
+    addImg(img2.src)
+    loadImage('images/cat3.jpeg').then((img3) => {
+      addImg(img3.src)
+    }).catch(function(error){
+      //Hanndle single error
+    })
+  }).catch(function(error){
+    //Hanndle single error
+  })
+}).catch(function(error){
+  //Hanndle single error
+})
+
+//same as above but more readable, creates array of promises
+// ES6!!
+Promise.all([
+  loadImage('images/cat4.jpeg'),
+  loadImage('images/cat5.jpeg'),
+  loadImage('images/cat6.jpeg')
+]).then((images) => {
+  images.forEach(img => addImg(img.src)
+  )
+}).catch((err) => {
+  //Handle error, if any fails all fail since they are in the same promise
+})
+
+
+/* --------------------- Streams
+  Array     - a series of multiple objects that are already there
+   &
+  Promise   - a notion of a single object that might arrives eventually
+  having a baby (stream) = flow of values that arrive when they feels like it
+  streams are functors!
+
+  Often use to read through a lot of data, which else would cause out of memory
+
+  Stateless applications, i.e. clients using streams such as keyboard or mouse inputs.
+  Handling state often results in bugs
+  baconJS is a popular library
+*/
+var stupidNumberStream = {
+  each: (callback) => {
+    setTimeout(() => callback(1), 1000)
+    setTimeout(() => callback(2), 2000)
+    setTimeout(() => callback(3), 3000)
+  }
+}
+stupidNumberStream.each(console.log);
+
+
+
+/* --------------------- Monad
+    a more powerful functor that also implements flatmap
+    flatmap = flatten streams to return values contained in streams
+      map only passes on the streams
+
+    Promises are monads, flatmap is actually called .then
+
+*/
+
+
+/* ------------------- Chapter 6
+
+*/
+// A vector type
+function Vector(x, y){
+  this.x = x;
+  this.y = y;
+}
+Vector.prototype = {
+  plus : function(vector){
+  	return new Vector((this.x + vector.x), (this.y + vector.y));
+  },
+  minus : function(vector){
+  	return new Vector((this.x - vector.x), (this.y - vector.y));
+  },
+  get length() {
+  	return Math.sqrt(this.x * this.x + this.y * this.y)
+  }
+}
+//console.log(new Vector(1, 2).plus(new Vector(2, 3)));   // → Vector{x: 3, y: 5}
+//console.log(new Vector(1, 2).minus(new Vector(2, 3)));  // → Vector{x: -1, y: -1}
+//console.log(new Vector(3, 4).length);                   // → 5
+
+// Another cell
+function StretchCell(inner, width, height){
+  this.inner = inner; //TextCell
+  this.width = width;
+  this.height = height;
+}
+
+//This time seperatly defined
+StretchCell.prototype.minWidth = function() {
+  return Math.max(this.inner.minWidth(), this.width);
+};
+StretchCell.prototype.minHeight = function() {
+  return Math.max(this.inner.minHeight(), this.height);
+};
+StretchCell.prototype.draw = function(width, height) {
+  return this.inner.draw(width, height);
+};
+
+//var sc = new StretchCell(new TextCell("abc"), 1, 2);  //TextCell undefined in this JS file
+//console.log(sc.minWidth());   // → 3
+//console.log(sc.minHeight());  // → 2
+//console.log(sc.draw(3, 2));   // → ["abc", "   "]
+
+// Sequence interface
+
+function logFive(sequence) {
+  for(var i=0; i<5; i++){
+    if(!sequence.next())
+      break;
+    console.log(sequence.current());
+  }
+}
+
+function ArraySeq(array) {
+  this.array = array;
+  this.pos = -1;
+}
+ArraySeq.prototype = {
+  next : function () {
+    if(this.pos >= this.array.length -1)
+      return false;
+    this.pos++;
+    return true;
+  },
+  current : function() {
+    return this.array[this.pos];
+  }
+};
+
+function RangeSeq(from, to) {
+  this.pos = from - 1;
+  this.to = to;
+}
+RangeSeq.prototype = {
+  next : function() {
+    if(this.pos >= this.to){
+      return false;
+    }
+    this.pos++;
+    return true;
+  },
+  current : function() {
+    return this.pos;
+  }
+}
+
+
+logFive(new ArraySeq([1, 2]));
+// → 1
+// → 2
+logFive(new RangeSeq(100, 1000));
+// → 100
+// → 101
+// → 102
+// → 103
+// → 104
