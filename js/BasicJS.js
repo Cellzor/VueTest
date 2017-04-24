@@ -184,6 +184,16 @@ var person = {
 //console.log("Person-object: "+person.address.state);  //Person-object: BLE
 //console.log("Person-object: "+person.fullName());     //Person-object: Petter Robsson
 
+/* ************ This and Bind
+This = the object/scope/variable calling the function,
+ this reference is dropped when function is assigned as below,
+bind binds the person to the seperated function
+*/
+var PersonFunctionTest = person.fullName;               //undefined
+var PersonFunctionTest = person.fullName.bind(person);  // Petter Robsson
+
+
+
 person.tester = "Test";
 //console.log(person.tester);         //Test
 //console.log("tester" in person);    //true
