@@ -46,3 +46,27 @@ Person.prototype.talk = function(){
 
 var crockford = new Person("SEMICOLOANS!! 1one1")
 crockford.talk()
+
+
+
+/* new expplaination
+  Spawn equals a basic implementation of 'new'
+*/
+
+function spawn(constructor){
+  var argsArray = Array.from(arguments);  //ES6
+  var argsArray = Array.prototype.slice.apply(arguments); // <ES6
+  console.log(argsArray)
+
+  //Step 1. create a new object
+  var obj = {}
+  //Step 2. Set the prototype of that Object to that of the supplied constructor
+  Object.setPrototypeOf(obj, constructor.prototype)
+  //Step 3. Executes the contstructor with this set the context of the created object
+  //apply() is as bind but executes the function immediately and returns its value
+  constructor.apply(obj, argsArray.slice(1))
+  //Step 4. Return the created object, if the constructor returns an object in itself the below will return that correctly
+  return constructor.apply(obj, argsArray.slice(1)) || obj;
+}
+var crockford2 = spawn(Person, 'SEMICOLOANS!! 1one1')
+crockford2.talk();
