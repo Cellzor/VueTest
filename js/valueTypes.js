@@ -43,3 +43,8 @@ console.log(thirdPerson);
 //Since Hobbies is an array, which is a reference type, it does only create a pointer for that
 person.hobbies.push('Reading');
 console.log(thirdPerson);
+
+
+//SLice() returns a selection of data from an array, if no args are supplied it returns a copy of the entire array
+//useful to copy data rather than creating a pointer towards the same data
+myHobbies = person.hobbies.slice();

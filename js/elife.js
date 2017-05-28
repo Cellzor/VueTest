@@ -41,7 +41,7 @@ Vector.prototype = {
 
 // ---------- Grid declartion
 function Grid(width, height){
-  this.space = new Array(width * height); //When calling the Array const with one number, it's created with given length
+  this.space = new Array(width * height); //When calling the Array constructor with one number, it's created with given length
   this.width = width;
   this.height = height
 }
@@ -67,7 +67,9 @@ console.log(grid.get(new Vector(1, 1)));  // → X
 
 */
 
+/*  ---------- Critter definition
 
+*/
 function BouncingCritter(){
   this.direction = randomElement(directionNames);
 }
@@ -79,6 +81,9 @@ BouncingCritter.prototype = {
   }
 };
 
+/*  ---------- World definition
+
+*/
 
 function elementFromChar(legend, ch){
   if(ch == " ")
@@ -98,9 +103,14 @@ function World(map, legend){
   var grid = new Grid(map[0].length, map.length);
   this.grid = grid;
   this.legend = legend;
-
+  //this here refers to the newly created object
   map.forEach(function(line, y) {
     for (var x = 0; x < line.length; x++)
+      //this here refers to the global object
+      // has to be called as a method in or to refer to the object
+      // grid below works as the outer function (the constructor) creates a local var "grid"
+      // a work-around pre-ES6 is: var self = this; in the outer function or by using .bind(this)
+      // higher-order functions also have a second paramter where this can be sent as, not all have this context
       grid.set(new Vector(x, y), elementFromChar(legend, line[x]))
   });
 }
@@ -115,9 +125,37 @@ World.prototype = {
       output += "\n";
     }
     return output;
+  },
+  turn : function (){
+    var acted = [];
+    this.grid.forEach(function(critter, vector){
+      if(critter.act && acted.indexOf(critter) == -1) {
+        acted.push(critter);
+        this.letAct(critter, vector);
+      }
+    }, this)
+  },
+  letAct : function(critter, vector){
+    var action = critter.act(new View(this, vector));
+    if(action && action.type == "move") {
+      var dest = this.checkDestination(action, vector);
+      if(dest && this.grid.get(dest) == null) {
+        this.grid.set(vector, null);
+        this.grid.set(dest, critter);
+      }
+    }
+  },
+  checkDestination : function(action, vector){
+    if(directions.hasOwnProperty(action.direction)){
+      var dest = vector.plus(directions[action.direction]);
+      if(this.grid.isInside(dest))
+        return dest;
+    }
   }
 };
 
+
+// "Main"
 function Wall(){}
 var world = new World(plan, {"#": Wall,
                              "o": BouncingCritter});
